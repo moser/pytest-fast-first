@@ -1,0 +1,6 @@
+*.swp
+*.pyc
+.venv
+.eggs
+pytest_fast_first.egg-info/
+.pytest-runtimes
