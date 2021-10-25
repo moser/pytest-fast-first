@@ -1,4 +1,6 @@
-import subprocess, time
+import subprocess
+import pathlib
+import os
 
 
 def _run(*additional_args):
@@ -55,6 +57,26 @@ def test_grouped_inverse():
     ]
 
 
+def test_custom_filepath():
+    test_filename = ".testfile"
+    if pathlib.Path(test_filename).exists():
+        os.remove(test_filename)
+
+    # first run will create the .testfile
+    _run(f"--ff-filepath", test_filename)
+
+    # on the second run order should be correct
+    assert _run(f"--ff-filepath", test_filename) == [
+        "example_tests/test_mod1.py::test_fastest",
+        "example_tests/test_mod2.py::test_fast",
+        "example_tests/test_mod1.py::test_kind_of_slow",
+        "example_tests/test_mod1.py::test_slow",
+        "example_tests/test_mod2.py::test_slowest",
+    ]
+    assert pathlib.Path(test_filename).exists()
+    os.remove(test_filename)
+
+
 def test_xdist():
     assert _run("-n", "2")
 
@@ -67,6 +89,7 @@ def main():
         test_grouped,
         test_grouped_inverse,
         test_xdist,
+        test_custom_filepath
     ]:
         try:
             test()

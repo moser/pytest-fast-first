@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="pytest-fast-first",
-    version="1.0.3",
+    version="1.0.4",
     url="https://github.com/moser/pytest-fast-first",
     author="Martin Vielsmaier",
     author_email="moser@moserei.de",
