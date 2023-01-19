@@ -1,6 +1,8 @@
-import json, pathlib, collections
+import json
+import pathlib
+import collections
 
-PATH = pathlib.Path(".pytest-runtimes")
+DEFAULT_FILEPATH = ".pytest-runtimes"
 RUNTIMES = {}
 
 
@@ -18,16 +20,27 @@ def pytest_addoption(parser):
         dest="ff_group_by_module",
         help="By default tests are just ordered by their runtime. If you have module-scoped fixtures, this can help with better fixture reuse..",
     )
+    group.addoption(
+        "--ff-filepath",
+        action="store",
+        dest="ff_filepath",
+        help="Filepath to store results",
+        default=DEFAULT_FILEPATH
+    )
 
 
-def pytest_configure():
-    if PATH.exists():
-        with open(".pytest-runtimes", "r") as fp:
+def pytest_configure(config):
+    path = pathlib.Path(config.getoption("ff_filepath"))
+
+    if path.exists():
+        with open(path, "r") as fp:
             RUNTIMES.update(**json.load(fp))
 
 
-def pytest_unconfigure():
-    with open(".pytest-runtimes", "w") as fp:
+def pytest_unconfigure(config):
+    path = pathlib.Path(config.getoption("ff_filepath"))
+
+    with open(path, "w") as fp:
         json.dump(RUNTIMES, fp, sort_keys=True, indent=4)
 
 

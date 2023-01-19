@@ -21,7 +21,7 @@ pip install pytest-fast-first
   suite when run with xdist)
 * `--ff-group-by-module`: By default tests are just ordered by their runtime. If 
   you have module-scoped fixtures, this can help with better fixture reuse.
-
+* `--ff-filepath: Use the given filepath to store/read results. Default: .pytest-runtimes
 ## State file
 
 The plugin creates the file `.pytest-runtimes` in which it stores the runtimes
